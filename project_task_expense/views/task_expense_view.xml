@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="inherit_hr_expense_view_form" model="ir.ui.view">
+            <field name="name">inherit.hr.expense.view.form</field>
+            <field name="model">hr.expense</field>
+            <field name="inherit_id" ref="hr_expense.hr_expense_view_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='unit_amount']" position="replace"/>
+
+                <xpath expr="//field[@name='tax_ids']" position="before">
+                    <field name="unit_cost" required="1" options="{'currency_type': 'currency_id'}"/>
+                    <field name="markup_value"/>
+                    <field name="unit_amount" required="1" widget="monetary"
+                           options="{'currency_field': 'currency_id', 'field_digits': True}"/>
+                </xpath>
+                <xpath expr="//label[@for='payment_mode']" position="replace"/>
+                <xpath expr="//field[@name='payment_mode']" position="replace"/>
+                <xpath expr="//group[3]" position="after">
+                    <group>
+                        <label for="payment_mode"/>
+                        <div>
+                            <field name="payment_mode" widget="radio"/>
+                        </div>
+                    </group>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="inherit_hr_expense_form_view_inherit_sale_expense" model="ir.ui.view">
+            <field name="name">inherit.hr.expense.form.inherit.sale.expense</field>
+            <field name="model">hr.expense</field>
+            <field name="inherit_id" ref="sale_expense.hr_expense_form_view_inherit_sale_expense"/>
+            <field name="priority">30</field>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='sale_order_id']" position="attributes">
+                    <attribute name="string">Project</attribute>
+                </xpath>
+                <xpath expr="//field[@name='sale_order_id']" position="after">
+                    <field name="project_task"
+                           attrs="{'invisible': [('can_be_reinvoiced', '=', False)]}"
+                           options="{'no_create_edit': True, 'no_create': True, 'no_open': True}"/>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="inherit_hr_expense_sheet_form_view_inherit_sale_expense" model="ir.ui.view">
+            <field name="name">inherit.hr.expense.sheet.form.inherit.sale.expense</field>
+            <field name="model">hr.expense.sheet</field>
+            <field name="inherit_id" ref="sale_expense.hr_expense_sheet_form_view_inherit_sale_expense"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='sale_order_id']" position="attributes">
+                    <attribute name="string">Project</attribute>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="inherit_view_task_form2" model="ir.ui.view">
+            <field name="name">inherit.view.task.form2</field>
+            <field name="model">project.task</field>
+            <field name="inherit_id" ref="project.view_task_form2"/>
+            <field name="arch" type="xml">
+                <div name="button_box" position="inside">
+                    <button name="action_get_expenses" class="oe_stat_button" type="object" icon="fa-dollar">
+                        <div class="o_stat_info">
+                            <field name="expense_count"/>
+                            <span class="o_stat_text">Expenses</span>
+                        </div>
+                    </button>
+                </div>
+            </field>
+        </record>
+    </data>
+</odoo>
