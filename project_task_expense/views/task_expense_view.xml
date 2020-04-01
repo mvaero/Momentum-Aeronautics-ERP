@@ -38,6 +38,7 @@
                 </xpath>
                 <xpath expr="//field[@name='sale_order_id']" position="after">
                     <field name="project_task"
+                           domain="[('sale_line_id.order_id', '=', sale_order_id)]"
                            attrs="{'invisible': [('can_be_reinvoiced', '=', False)]}"
                            options="{'no_create_edit': True, 'no_create': True, 'no_open': True}"/>
                 </xpath>

@@ -8,7 +8,7 @@ class HRExpense(models.Model):
                                 states={'draft': [('readonly', False)], 'reported': [('readonly', False)],
                                         'refused': [('readonly', False)]}, digits='Product Price')
     markup_value = fields.Float('Markup(%)')
-    project_task = fields.Many2one('project.task', 'Project Task', domain="[('state', '=', 'sale'), ('company_id', '=', company_id)]")
+    project_task = fields.Many2one('project.task', 'Project Task')
     unit_amount = fields.Float("Unit Price", readonly=True, required=True,
                                states={'draft': [('readonly', False)], 'reported': [('readonly', False)],
                                        'refused': [('readonly', False)]}, digits='Product Price',
