@@ -26,6 +26,20 @@
                 </xpath>
             </field>
         </record>
+        
+        <record id="inherit_hr_expense_sheet_form" model="ir.ui.view">
+            <field name="name">inherit.hr.expense.sheet.form</field>
+            <field name="model">hr.expense.sheet</field>
+            <field name="inherit_id" ref="hr_expense.view_hr_expense_sheet_form"/>
+            <field name="arch" type="xml">
+            	<xpath expr="//field[@name='tax_ids']" position="before">
+            		<field name="unit_cost"/>
+                    <field name="markup_value"/>
+                    <field name="unit_amount"/>
+            	</xpath>
+            </field>
+        </record>
+        
 
         <record id="inherit_hr_expense_form_view_inherit_sale_expense" model="ir.ui.view">
             <field name="name">inherit.hr.expense.form.inherit.sale.expense</field>

@@ -1,5 +1,17 @@
 from odoo import models, fields, api, _
 
+class HrExpenseSheetRegisterPaymentWizard(models.TransientModel):
+    _inherit = "hr.expense.sheet.register.payment.wizard"
+ 
+    @api.model
+    def default_get(self, fields):
+        res = super(HrExpenseSheetRegisterPaymentWizard, self).default_get(fields)
+        if self._context.get('active_id'):
+            expense_sheet = self.env['hr.expense.sheet'].browse(self._context.get('active_id'))
+            if expense_sheet.account_move_id:
+                res.update({'amount':sum(db.debit for db in expense_sheet.account_move_id.line_ids)})
+        return res
+
 
 class HRExpense(models.Model):
     _inherit = 'hr.expense'
