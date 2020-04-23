@@ -44,7 +44,7 @@ class HRExpense(models.Model):
         if self.unit_cost and self.markup_value:
             unit_price = self.unit_cost + (self.unit_cost * (self.markup_value / 100))
         else:
-            unit_price = self.quantity * self.unit_cost
+            unit_price = self.unit_cost
         self.update({'unit_amount': unit_price})
 
 
@@ -68,7 +68,7 @@ class HRExpense(models.Model):
             # source move line
             amount = taxes['total_excluded']
             if expense.markup_value:
-                amount = expense.unit_cost
+                amount = expense.unit_cost * expense.quantity
                 taxes = expense.tax_ids.with_context(round=True).compute_all(expense.unit_cost, expense.currency_id, expense.quantity, expense.product_id)
             amount_currency = False
             if different_currency:
