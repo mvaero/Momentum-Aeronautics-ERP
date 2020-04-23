@@ -16,6 +16,18 @@ class HrExpenseSheetRegisterPaymentWizard(models.TransientModel):
 class HRExpense(models.Model):
     _inherit = 'hr.expense'
 
+    @api.onchange('product_id', 'company_id')
+    def _onchange_product_id(self):
+        if self.product_id:
+            if not self.name:
+                self.name = self.product_id.display_name or ''
+            self.unit_cost = self.product_id.price_compute('standard_price')[self.product_id.id]
+            self.product_uom_id = self.product_id.uom_id
+            self.tax_ids = self.product_id.supplier_taxes_id.filtered(lambda tax: tax.company_id == self.company_id)  # taxes only from the same company
+            account = self.product_id.product_tmpl_id._get_product_accounts()['expense']
+            if account:
+                self.account_id = account
+
     unit_cost = fields.Monetary('Unit Cost', readonly=True, required=True,
                                 states={'draft': [('readonly', False)], 'reported': [('readonly', False)],
                                         'refused': [('readonly', False)]}, digits='Product Price')
@@ -31,6 +43,8 @@ class HRExpense(models.Model):
         unit_price = 0.0
         if self.unit_cost and self.markup_value:
             unit_price = self.unit_cost + (self.unit_cost * (self.markup_value / 100))
+        else:
+            unit_price = self.quantity * self.unit_cost
         self.update({'unit_amount': unit_price})
 
 
