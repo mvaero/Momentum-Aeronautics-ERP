@@ -33,8 +33,8 @@
             <field name="inherit_id" ref="hr_expense.view_hr_expense_sheet_form"/>
             <field name="arch" type="xml">
             	<xpath expr="//field[@name='tax_ids']" position="before">
-            		<field name="unit_cost"/>
             		<field name="quantity"/>
+                    <field name="unit_cost"/>
                     <field name="markup_value"/>
                     <field name="unit_amount"/>
             	</xpath>
