@@ -34,6 +34,7 @@
             <field name="arch" type="xml">
             	<xpath expr="//field[@name='tax_ids']" position="before">
             		<field name="unit_cost"/>
+            		<field name="quantity"/>
                     <field name="markup_value"/>
                     <field name="unit_amount"/>
             	</xpath>
