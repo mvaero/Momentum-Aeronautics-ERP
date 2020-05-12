@@ -41,11 +41,12 @@ class HRExpense(models.Model):
     @api.depends('unit_cost', 'markup_value')
     def _compute_unit_amount(self):
         unit_price = 0.0
-        if self.unit_cost and self.markup_value:
-            unit_price = self.unit_cost + (self.unit_cost * (self.markup_value / 100))
-        else:
-            unit_price = self.unit_cost
-        self.update({'unit_amount': unit_price})
+        for rec in self:
+            if rec.unit_cost and rec.markup_value:
+                unit_price = rec.unit_cost + (rec.unit_cost * (rec.markup_value / 100))
+            else:
+                unit_price = rec.unit_cost
+            rec.update({'unit_amount': unit_price})
 
 
     def _get_account_move_line_values(self):
