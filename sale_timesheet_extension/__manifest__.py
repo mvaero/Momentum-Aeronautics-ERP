@@ -28,5 +28,6 @@
     'data': [
         'report/sale_report_templates.xml',
         'views/sale_portal_template_view.xml',
+        'report/account_invoice_report.xml',
     ],
 }
