@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <template id="report_invoice_document_project_timesheet_ext"
+            inherit_id="account.report_invoice_document">
+            <xpath expr="//div[@id='informations']" position="inside">
+                <div t-if="o.project_name" class="col-auto mw-100 mb-2">
+                    <strong>Project:</strong>
+                    <p class="m-0" t-field="o.project_name" />
+                </div>
+            </xpath>
+            <xpath expr="//div[@name='invoice_date']" position="replace">
+                <div class="col-auto mw-100 mb-2" t-if="o.invoice_date" name="invoice_date">
+                    <strong>Date:</strong>
+                    <p class="m-0" t-field="o.invoice_date" />
+                </div>
+            </xpath>
+        </template>
+    </data>
+</odoo>
