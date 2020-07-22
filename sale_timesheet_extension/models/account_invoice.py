@@ -12,16 +12,14 @@ from odoo import api, fields, models, _
 class AccountMove(models.Model):
     _inherit = 'account.move'
 
-    sale_order_id = fields.Many2one('sale.order', 'Sales Order',
-                                    compute='_compute_sale_order_id',
-                                    store=True, readonly=False)
-    project_id = fields.Many2one(
-        'project.project', 'Project', related='sale_order_id.project_id')
+    project_name = fields.Char(string="Project",compute='_compute_project_name', help="Show the project namebased on sale order")
 
-    def _compute_sale_order_id(self):
+    def _compute_project_name(self):
+        project_name = ""
+        projects = []
         for move in self:
-            order_id = move.invoice_line_ids.mapped('sale_line_ids').mapped('order_id')
-            if order_id:
-                move.sale_order_id = order_id
-            else:
-                move.sale_order_id = False
+            orders = move.invoice_line_ids.mapped('sale_line_ids').mapped('order_id')
+            for order in orders:
+                if order.project_id:
+                    projects.append(order.project_id.name)
+            move.project_name = ','.join(projects)
