@@ -24,3 +24,26 @@ class SaleOrderLine(models.Model):
             'account_analytic_id': self.order_id.analytic_account_id.id
         })
         return values
+
+
+class SaleOrder(models.Model):
+    """Create Analytic before procument run."""
+
+    _inherit = 'sale.order'
+
+    def _action_confirm(self):
+        """Create Analytic before confirm.
+
+        Implementation of additionnal mecanism of Sales Order confirmation.
+        This method should be extended when the confirmation should
+        generated other documents. In this method, the SO are in 'sale'
+        state (not yet 'done').
+        """
+        # create an analytic account if at least an expense product
+        for order in self:
+            if any([expense_policy not in [False, 'no'] for expense_policy in
+                    order.order_line.mapped('product_id.expense_policy')]):
+                if not order.analytic_account_id:
+                    order._create_analytic_account()
+
+        return super(SaleOrder, self)._action_confirm()

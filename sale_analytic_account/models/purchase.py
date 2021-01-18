@@ -19,6 +19,15 @@ class StockRule(models.Model):
             'account_analytic_id').id
         return res
 
+    def _update_purchase_order_line(self, product_id, product_qty, product_uom,
+                                    company_id, values, line):
+        res = super(StockRule, self)._update_purchase_order_line(
+            product_id, product_qty, product_uom, company_id, values, line)
+        res['account_analytic_id'] = values.get(
+            'account_analytic_id', False) and values.get(
+            'account_analytic_id').id
+        return res
+
 
 class StockMove(models.Model):
     """Update analytic account in POL."""
